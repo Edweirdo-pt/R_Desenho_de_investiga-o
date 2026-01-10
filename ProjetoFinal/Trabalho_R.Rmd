@@ -29,6 +29,7 @@ dados$Billing.Amount <- as.numeric(dados$Billing.Amount)
 
 # Fixa a semente para que a "aleatoriedade" seja sempre igual cada vez que se corre o código.
 set.seed(123)
+Editei isto só para testar a coisa
 
 # Calcula o número total de registos na base original.
 n_total <- nrow(dados)
@@ -567,6 +568,7 @@ ggplot(amostra, aes(x = Medical.Condition, fill = Gender)) +
 ```
 
 A análise suplementar procurou verificar se a condição médica de admissão estava associada ao sexo do paciente. O teste Qui-Quadrado revelou um $p = `r valor_p_formatado `$, indicando que não existe uma associação significativa. Isto sugere que, nesta base de dados, a probabilidade de um paciente ser admitido com uma determinada condição (ex: Asma ou Cancro) é idêntica para homens e mulheres.
+
 
 
 
