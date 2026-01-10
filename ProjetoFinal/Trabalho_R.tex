@@ -1,0 +1,194 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Trabalho\_R},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Trabalho\_R}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\section{Pergunta 1 -- Classificação das
+Variáveis}\label{pergunta-1-classificauxe7uxe3o-das-variuxe1veis}
+
+Nesta etapa, procedeu-se à classificação técnica de todas as variáveis
+presentes na base de dados, identificando a sua natureza e a respetiva
+escala de medição. Esta classificação é fundamental para selecionar os
+métodos estatísticos e as representações gráficas mais adequadas.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Variável & Tipo de Variável & Escala de Medição \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Name} & Qualitativa Nominal & Nominal \\
+\textbf{Age} & Quantitativa Contínua & Razão \\
+\textbf{Gender} & Qualitativa Nominal & Nominal \\
+\textbf{Blood Type} & Qualitativa Nominal & Nominal \\
+\textbf{Medical Condition} & Qualitativa Nominal & Nominal \\
+\textbf{Date of Admission} & Quantitativa Contínua & Intervalo \\
+\textbf{Doctor / Hospital} & Qualitativa Nominal & Nominal \\
+\textbf{Insurance Provider} & Qualitativa Nominal & Nominal \\
+\textbf{Billing Amount} & Quantitativa Contínua & Razão \\
+\textbf{Room Number} & Qualitativa Nominal & Nominal \\
+\textbf{Admission Type} & Qualitativa Nominal & Nominal \\
+\textbf{Discharge Date} & Quantitativa Contínua & Intervalo \\
+\textbf{Medication} & Qualitativa Nominal & Nominal \\
+\textbf{Test Results} & Qualitativa Nominal & Nominal \\
+\end{longtable}
+
+\section{Pergunta 2 -Caracterização de
+variáveis}\label{pergunta-2--caracterizauxe7uxe3o-de-variuxe1veis}
+
+Vamos usar o R Base para os gráficos da \texttt{Age} (Histograma e
+Boxplot) para evitar que o R tente instalar o \texttt{patchwork} ou o
+\texttt{ggplot2} a meio do PDF, o que ``suja'' o documento.
+
+\section{2.1 ``Age''}\label{age}
+
+\textbf{Classificação:} Quantitativa Contínua (Escala de Razão).
+
+\textbf{Justificação:} Por ser uma variável quantitativa, utilizam-se
+medidas de tendência central e dispersão. O histograma permite observar
+a forma da distribuição, enquanto o boxplot identifica a existência de
+valores atípicos.
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   18.00   34.00   51.00   51.25   68.00   85.00
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 19.67971
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Trabalho_R_files/figure-latex/unnamed-chunk-1-1.pdf}}
+\textbf{Exploração} A idade média dos pacientes na amostra é de 51.25
+anos. A proximidade entre a média e a mediana, aliada à observação do
+histograma, sugere uma distribuição relativamente uniforme/simétrica e o
+boxplot confirma a inexistência de outliers, indicando uma amostra sem
+casos extremos que influenciem a média.
+
+\section{2.2 ``Gender''}\label{gender}
+
+\textbf{Classificação:} Qualitativa Nominal(dicotómica)
+
+\textbf{Justificação:} Por tratar-se de uma variável com apenas duas
+categorias possíveis (Masculino e Feminino), a caracterização é feita
+através de frequências absolutas e relativas. O gráfico de barras é a
+representação ideal para comparar a proporção entre os dois grupos,
+permitindo verificar visualmente se a amostra é equilibrada.
+
+\pandocbounded{\includegraphics[keepaspectratio]{Trabalho_R_files/figure-latex/unnamed-chunk-2-1.pdf}}
+
+\textbf{Exploração} A variável apresenta apenas duas categorias
+possíveis: Female (Feminino) e Male (Masculino). Observa-se que a
+amostra é composta por 2735 mulheres e 2696 homens, correspondendo a
+50.4\% e 49.6\%, respetivamente. Esta distribuição quase paritária
+(muito próxima dos 50\% para cada categoria) indica que a amostra está
+bem equilibrada em termos de género, não havendo predominância de um
+sexo sobre o outro.
+
+\section{2.3 ``Blood.Type''}\label{blood.type}
+
+\textbf{Classificação:} Variável qualitativa nominal com 8 categorias.
+
+\textbf{Justificação:} Utilizou-se um gráfico de barras ordenado de
+forma decrescente, o que facilita a identificação imediata da ``Moda''
+(o grupo mais frequente).
+
+\pandocbounded{\includegraphics[keepaspectratio]{Trabalho_R_files/figure-latex/unnamed-chunk-3-1.pdf}}
+
+A análise da distribuição dos grupos sanguíneos revela que o tipo O+ é o
+mais frequente na amostra, registando-se em 698 pacientes
+\texttt{(r\ round(blood\_perc{[}1{]},\ 1)\%)}. Seguem-se os grupos A+ e
+AB- . Esta diversidade é característica de bases de dados hospitalares
+amplas, não se verificando uma predominância absoluta que comprometa a
+representatividade de um grupo específico.
+
+\section{2.4 ``Medical.Condition''}\label{medical.condition}
+
+\textbf{Classificação:} Qualitativa Nominal
+
+\textbf{Justificação:}Para a variável Medical.Condition, optou-se por um
+gráfico de barras horizontal. Esta escolha permite uma leitura clara das
+patologias, evitando a sobreposição de texto, e facilita a comparação da
+carga de doença entre as diferentes categorias.
+
+\pandocbounded{\includegraphics[keepaspectratio]{Trabalho_R_files/figure-latex/unnamed-chunk-4-1.pdf}}
+
+\end{document}
