@@ -88,10 +88,19 @@ print('Desvio padrão:')
 sd(amostra$Age) 
 
 
-# Gráficos (Lado a lado sem bibliotecas extras)
+# Gráficos
 par(mfrow=c(1,2)) # Divide a moldura em 1 linha e 2 colunas
 hist(amostra$Age, main="Histograma", xlab="Idade",ylab = "Frequência", col="lightblue", border="white")
+
+# Legenda do Gráfico 1
+mtext(expression(bold("Gráfico 1 – ") * 'Histograma da variável "Age"'),
+      side = 1, line = 4)
+
 boxplot(amostra$Age, main="Boxplot", ylab="Idade", col="lightblue")
+
+# Legenda do Gráfico 2
+mtext(expression(bold("Gráfico 2 – ") * 'Boxplot da variável "Age"'),
+      side = 1, line = 4)
 
 ```
 
@@ -130,6 +139,10 @@ text(x = bar_pos,
      cex = 0.9,     # Tamanho da fonte
      font = 2)      # Negrito
 
+# 6. Colocar Legenda no Gráfico
+mtext(expression(bold("Gráfico 3 – ") * "Gráfico de barras da Distribuição por Sexo (Frequência e %)"),
+      side = 1, line = 4)
+
 ```
 
 **Exploração** A amostra é constituída por `r genero_abs[1]` pacientes do sexo feminino (`r round(genero_rel[1], 1)`%) e `r genero_abs[2]` do sexo masculino (`r round(genero_rel[2], 1)`%). A proximidade entre as frequências relativas das duas categorias indica uma distribuição equilibrada, não se observando predominância relevante de um dos sexos na amostra.
@@ -167,6 +180,10 @@ text(x = bp_blood,
      cex = 0.8, 
      font = 2)
 
+# 5. Colocar Legenda no Gráfico
+mtext(expression(bold("Gráfico 4 – ") * "Gráfico de barras 'Prevalência por Grupo Sanguíneo'"),
+      side = 1, line = 4)
+
 ```
 
 **Exploração** A variável apresenta oito categorias distintas correspondentes aos diferentes grupos sanguíneos. O grupo O+ é o mais frequente na amostra, com 698 pacientes (12.9%), enquanto o grupo O− apresenta a menor frequência, com 643 pacientes (11.8%). As frequências relativas dos diferentes grupos são próximas entre si, não se observando uma predominância marcada de um grupo sanguíneo face aos restantes.
@@ -202,7 +219,11 @@ bp_med <- barplot(med_perc_plot,
 txt_med <- paste0(round(med_perc_plot, 1), "% (", med_tab_plot, ")")
 text(x = med_perc_plot, y = bp_med, labels = txt_med, pos = 4, cex = 0.7, font = 2)
 
-# Reset das margens para o próximo gráfico não ficar estranho
+# 6. Colocar Legenda no Gráfico
+mtext(expression(bold("Gráfico 5 – ") * "Gráfico de barras 'Distribuição de Condições Médicas'"),
+      side = 1, line = 4)
+
+# Reset das margens
 par(mar = c(5, 4, 4, 2))
 
 ```
@@ -219,11 +240,11 @@ Foi criada a variável `Days_Stay`, que calcula o período de internamento atrav
 amostra$Days_Stay <- as.numeric((amostra$Discharge.Date) - (amostra$Date.of.Admission))
 
 
-# 1. Calculo das metricas garantindo que removemos NAs
+# 1.1 Calculo das metricas garantindo que removemos NAs
 resumo_p3 <- aggregate(Days_Stay ~ Admission.Type, data = amostra, 
                        function(x) c(m = mean(x, na.rm = TRUE), s = sd(x, na.rm = TRUE)))
 
-# 2. Criar o data frame e garantir que os numeros sao numericos
+# 1.2 Criar o data frame e garantir que os numeros sao numericos
 tab_final <- data.frame(
   Admissao = as.character(resumo_p3[, 1]),
   Media = as.numeric(round(resumo_p3[, 2][, "m"], 2)),
@@ -244,16 +265,15 @@ Após a criação da variável `Days_Stay` procedeu-se à comparação da sua va
 # 1. Criação do Boxplot de Idade por Condição Médica
 library(ggplot2)
 ggplot(amostra, aes(x = Medical.Condition, y = Age, fill = Medical.Condition)) +
-  # 1. Barras horizontais delimitadoras
+  # 1.1 Barras horizontais delimitadoras
   stat_boxplot(geom = "errorbar", width = 0.2) + 
   geom_boxplot(alpha = 0.7, outlier.colour = "red") +
-  # 2. legenda da escala do eixo Y de 10 em 10 anos + texto para titulo, eixos e legenda do gráfico 
+  # 1.2 legenda da escala do eixo Y de 10 em 10 anos + texto para titulo, eixos e legenda do gráfico 
   scale_y_continuous(breaks = seq(0, 100, by = 10)) +
-  labs(title = "Distribuição da Idade por Condição Médica",
-       key = "Os números na base indicam o tamanho da amostra (n) por categoria",
+  labs(key = "Os números na base indicam o tamanho da amostra (n) por categoria",
        x = "Condição Médica",
        y = "Idade (Anos)",
-       caption = "Gráfico X. Boxplot de distribuição 'idade' vs 'Condição médica'") +
+       caption = "Gráfico 7 - Boxplot da distribuição 'idade' vs 'Condição médica'") +
   
   #aplicar um tema basico para melhor visualizção e poisção de eixo x e legenda
   theme_minimal() +
@@ -281,10 +301,10 @@ ggplot(amostra, aes(x = Medical.Condition, fill = Admission.Type)) +
              vjust = -0.5,   # Coloca o texto ligeiramente acima da barra
              size = 3.5,     # Tamanho da fonte do N
              fontface = "bold") +
-  labs(title = "Tipo de Admissão por Condição Médica",
-       x = "Condição Médica",
+  labs(x = "Condição Médica",
        y = "Número de Pacientes (Frequência)",
-       fill = "Tipo de Admissão") +
+       fill = "Tipo de Admissão",
+        caption = "Gráfico 8 - Tipo de Admissão por Condição Médica") +
   
   theme_minimal() +
   # Inclinamos o texto do eixo X para leitura clara das condições
@@ -567,6 +587,7 @@ ggplot(amostra, aes(x = Medical.Condition, fill = Gender)) +
 ```
 
 A análise suplementar procurou verificar se a condição médica de admissão estava associada ao sexo do paciente. O teste Qui-Quadrado revelou um $p = `r valor_p_formatado `$, indicando que não existe uma associação significativa. Isto sugere que, nesta base de dados, a probabilidade de um paciente ser admitido com uma determinada condição (ex: Asma ou Cancro) é idêntica para homens e mulheres.
+
 
 
 
