@@ -2,6 +2,39 @@
 title: "Trabalho_R"
 output: html_document
 ---
+\begin{titlepage}
+\centering
+
+% Título maior
+\vspace*{1cm}
+{\Huge \textbf{Trabalho Final}\\[0.3cm]
+\Large \textbf{Desenho de Investigação em Organizações de Saúde}}
+
+% Ajustar posição da imagem para o meio
+\vspace{3.5cm}
+\includegraphics[width=0.45\textwidth]{logo.png}
+\vspace{3cm}
+
+% Empurrar nomes para baixo
+\vfill
+
+% Nomes no canto inferior direito
+\raggedleft
+{\large
+Eduardo Figueira, n.º 2025127\\
+João Gonçalves, n.º 2025129
+}
+
+\vspace{0.8cm}
+
+% Data centrada no fundo
+\begin{center}
+{\large 2025/2026}
+\end{center}
+
+\end{titlepage}
+
+\newpage
 
 
 ```{r setup, include=FALSE}
@@ -694,6 +727,7 @@ A análise gráfica das condições médicas na amostra de pacientes do sexo mas
 
 
 *A análise gráfica evidencia que as condições médicas mais frequentes entre os pacientes do sexo masculino são Arthritis (17,4%) e Hypertension (17,3%), apresentando proporções muito semelhantes. Seguem-se Asthma (16,8%), Diabetes (16,7%) e Cancer (16,6%), com valores igualmente próximos entre si. A condição menos frequente é Obesity, representando 15,2% dos casos observados neste subgrupo. A distribuição das condições médicas na amostra masculina revela um padrão relativamente equilibrado, sem predominância marcada de uma patologia específica. As diferenças observadas entre as categorias são pequenas, indicando que, dentro do género masculino, as diversas condições médicas apresentam prevalências semelhantes, ainda que com uma ligeira predominância de artrite e hipertensão. Na população masculina analisada, as diferentes condições médicas apresentam uma distribuição globalmente equilibrada, destacando-se marginalmente a artrite e a hipertensão como as patologias mais frequentes, e a obesidade como a menos representada.*
+
 
 
 
