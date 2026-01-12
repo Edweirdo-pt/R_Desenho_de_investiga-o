@@ -1,6 +1,10 @@
 ---
-title: "Trabalho_R"
-output: html_document
+output:
+  pdf_document:
+    latex_engine: xelatex
+  word_document: default
+  html_document:
+    df_print: paged
 ---
 \begin{titlepage}
 \centering
@@ -37,11 +41,13 @@ João Gonçalves, n.º 2025129
 \newpage
 
 
+
 ```{r setup, include=FALSE}
 # Criação da base de dados, de forma aleatória, a partir da BD "healthcare_dataset.csv"
 # Configurações globais: echo=TRUE garante que o código  aparece no PDF.
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(ggplot2)
+Sys.setlocale("LC_CTYPE", "Portuguese_Portugal.utf8")
 
 # Leitura da base de dados
 dados <- read.csv("healthcare_dataset.csv", stringsAsFactors = FALSE)
@@ -88,6 +94,12 @@ write.csv(amostra, "healthcare_dataset_sample.csv", row.names = FALSE)
 
 Nesta etapa, procedeu-se à classificação técnica de todas as variáveis presentes na base de dados, identificando a sua natureza e a respetiva escala de medição. Esta classificação é fundamental para selecionar os métodos estatísticos e as representações gráficas mais adequadas.
 
+
+
+
+*Tabela 1 - Classificação de variáveis em estudo*
+
+
 | Variável | Tipo de Variável | Escala de Medição |
 | :--- | :--- | :--- |
 | **Name** | Qualitativa Nominal | Nominal |
@@ -106,13 +118,12 @@ Nesta etapa, procedeu-se à classificação técnica de todas as variáveis pres
 | **Test Results** | Qualitativa Nominal | Nominal |
 
 
-# Pergunta 2.Caracterize as variáveis Age, Gender, Blood.Type, Medical.Condition, recorrendo a gráficos e/ou estatísticas descritivas de acordo com as características das variáveis. 
+# Pergunta 2 - Caracterize as variáveis Age, Gender, Blood.Type, Medical.Condition, recorrendo a gráficos e/ou estatísticas descritivas de acordo com as características das variáveis. 
 
 *2.1 "Age"*
+**Classificação:** Variável Quantitativa Discreta, medida numa escala de razão.
 
-**Classificação:** Variável Quantitativa Contínua, medida numa escala de razão.
-
-**Justificação:** Por se tratar de uma variável quantitativa contínua, a sua caracterização baseia-se em medidas de tendência central e de dispersão. O histograma permite observar a forma geral da distribuição, enquanto o boxplot possibilita a identificação de valores extremos e a análise da dispersão.
+**Justificação:** Por se tratar de uma variável quantitativa discreta, a sua caracterização baseia-se em medidas de tendência central e de dispersão. O histograma permite observar a forma geral da distribuição, enquanto o boxplot possibilita a identificação de valores extremos e a análise da dispersão.
 
 ```{r echo=FALSE}
 # Estatísticas Descritivas
@@ -140,8 +151,9 @@ mtext(expression(bold("Gráfico 2 – ") * 'Boxplot da variável "Age"'),
 
 **Exploração** A idade dos pacientes apresenta uma distribuição relativamente equilibrada, com média próxima da mediana. O histograma sugere uma distribuição aproximadamente simétrica, enquanto o boxplot não evidencia a presença de outliers relevantes. Estes resultados indicam uma amostra etariamente diversificada, sem casos extremos que influenciem significativamente as medidas centrais.
 
-*2.2 "Gender"*
+\newpage
 
+*2.2 "Gender"*
 **Classificação:** Variável Qualitativa Nominal (dicotómica).
 
 **Justificação:** Por se tratar de uma variável categórica sem ordem, a sua caracterização baseia-se na análise de frequências absolutas e relativas. O gráfico de barras é a representação mais adequada para comparar as proporções entre as duas categorias e avaliar o equilíbrio da amostra.
@@ -181,8 +193,9 @@ mtext(expression(bold("Gráfico 3 – ") * "Distribuição por Sexo (Frequência
 
 **Exploração** A amostra é constituída por 2735 pacientes do sexo feminino (50.4%) e 2696 do sexo masculino (49.6%). A proximidade entre as frequências relativas das duas categorias indica uma distribuição equilibrada, não se observando predominância relevante de um dos sexos.
 
-*2.3 "Blood.Type"*
+\newpage
 
+*2.3 "Blood.Type"*
 **Classificação:** Variável Qualitativa Nominal (Politómica).
 
 **Justificação:** Por se tratar de uma variável categórica sem ordem, a sua caracterização baseia-se na análise de frequências absolutas e relativas. Recorreu-se a um gráfico de barras ordenado, permitindo uma comparação visual direta entre as frequências dos diferentes grupos sanguíneos e a identificação da categoria mais prevalente.
@@ -223,8 +236,9 @@ mtext(expression(bold("Gráfico 4 – ") * "Prevalência da amostra por Grupo Sa
 
 **Exploração** A variável apresenta oito categorias distintas correspondentes aos diferentes grupos sanguíneos. O grupo O+ é o mais frequente na amostra, com 698 pacientes (12.9%), enquanto o grupo O− apresenta a menor frequência, com 643 pacientes (11.8%). As frequências relativas dos diferentes grupos são próximas entre si, não se observando uma predominância marcada de um grupo sanguíneo face aos restantes.
 
-*2.4 "Medical.Condition"*
+\newpage
 
+*2.4 "Medical.Condition"*
 **Classificação:** Variável Qualitativa Nominal
 
 **Justificação:** Recorreu-se a um gráfico de barras horizontal, que permite uma leitura clara das diferentes patologias, evita a sobreposição de texto e, através da ordenação decrescente, facilita a comparação da prevalência entre as várias condições clínicas.
@@ -266,7 +280,7 @@ par(mar = c(5, 4, 4, 2))
 
 **Exploração** A condição médica mais frequente na amostra é "Hypertension" (17.3%), enquanto "Obesity" apresenta a menor frequência (16.0%). As diferenças observadas entre as várias patologias são reduzidas, sugerindo uma distribuição relativamente equilibrada da carga de doença na amostra analisada.
 
-# Pergunta 3. Compare a variabilidade do número de dias que os pacientes estão internados (obtenha variável secundária a partir da informação disponível na BD) de acordo com o tipo de admissão. 
+# Pergunta 3 - Compare a variabilidade do número de dias que os pacientes estão internados (obtenha variável secundária a partir da informação disponível na BD) de acordo com o tipo de admissão. 
 
 Foi criada a variável `Days_Stay`, que calcula o período de internamento através da diferença entre a data de alta (`Discharge.Date`) e a data de admissão (`Date.of.Admission`). 
 
@@ -295,7 +309,7 @@ knitr::kable(tab_final, col.names = c("Tipo de Admissao", "Media", "Desvio Padra
 Após a criação da variável `Days_Stay` procedeu-se à comparação da sua variabilidade de acordo com o tipo de admissão. As médias do número de dias internados são semelhantes entre os três grupos, situando-se em torno de 15.6 dias. A análise do desvio-padrão evidencia diferenças na variabilidade, sendo o grupo Urgent o que apresenta maior dispersão dos dias de internamento (desvio-padrão de 8.70 dias), seguido dos grupos Emergency e Elective. Estes resultados indicam que, embora a duração média do internamento seja semelhante entre os tipos de admissão, a variabilidade é ligeiramente superior nos casos urgentes.
 
 
-# Pergunta 4. Compare os boxplots da idade (Age) dos pacientes nas diferentes categorias da condição médica (Medical.Condition).
+# Pergunta 4 - Compare os boxplots da idade (Age) dos pacientes nas diferentes categorias da condição médica (Medical.Condition).
 
 ```{r echo=FALSE}
 # 1. Criação do Boxplot de Idade por Condição Médica
@@ -314,7 +328,8 @@ ggplot(amostra, aes(x = Medical.Condition, y = Age, fill = Medical.Condition)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.caption = element_text(hjust = 0.5)) +
-  scale_fill_brewer(palette = "Set3")
+  scale_fill_brewer(palette = "Set3") + 
+  theme(legend.position = "none")
 ```
 
 
@@ -323,7 +338,7 @@ A comparação visual dos boxplots indica que a distribuição etária é abrang
 
 
 
-# Pergunta 5. Obtenha uma representação gráfica que represente em simultâneo as variáveis Medical.Condition e Admission.Type. 
+# Pergunta 5 - Obtenha uma representação gráfica que represente em simultâneo as variáveis Medical.Condition e Admission.Type. 
 
 ```{r echo=FALSE}
 ggplot(amostra, aes(x = Medical.Condition, fill = Admission.Type)) +
@@ -338,8 +353,7 @@ ggplot(amostra, aes(x = Medical.Condition, fill = Admission.Type)) +
   labs(x = "Condição Médica",
        y = "Número de Pacientes (Frequência)",
        fill = "Tipo de Admissão",
-       caption = bquote(bold("Gráfico 7") ~ "- Tipo de Admissão por Condição Médica")
-       ) +
+        caption = bquote(bold("Gráfico 7") ~ "- Tipo de Admissão por Condição Médica")) +
   
   theme_minimal() +
   # Inclinamos o texto do eixo X para leitura clara das condições
@@ -353,11 +367,13 @@ ggplot(amostra, aes(x = Medical.Condition, fill = Admission.Type)) +
 Para representar simultaneamente as variáveis Medical.Condition e Admission.Type, recorreu-se a um gráfico de barras lado a lado, permitindo comparar, para cada condição médica, a distribuição dos diferentes tipos de admissão.
 A análise do gráfico indica que, para todas as condições médicas, os três tipos de admissão apresentam frequências semelhantes, não se observando diferenças acentuadas entre categorias. Em algumas patologias, como Hypertension e Cancer, verifica-se uma ligeira predominância das admissões emergentes e urgentes face às eletivas, embora o padrão global sugira uma distribuição relativamente equilibrada dos tipos de admissão entre as diferentes condições médicas.
 
-# Pergunta 6. Para os pacientes que tiveram um resultado inconclusivo durante um teste médico na admissão, caracterize a distribuição do valor faturado pelos serviços de saúde (Billing.Amount)
+# Pergunta 6 - Para os pacientes que tiveram um resultado inconclusivo durante um teste médico na admissão, caracterize a distribuição do valor faturado pelos serviços de saúde (Billing.Amount)
 
-```{r item6, echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
+```{r echo=FALSE}
 # 1. Garantir a filtragem 
 dados_inconclusivos <- subset(amostra, Test.Results == "Inconclusive")
+library(ggplot2)
+library(scales)
 
 # 2. Filtragem dos dados (apenas resultados inconclusivos)
 dados_inconclusivos <- subset(amostra, Test.Results == "Inconclusive")
@@ -376,7 +392,7 @@ abline(h = media_val, col = "red", lwd = 2, lty = 2)
 text(x = 1,
      y = media_val + (0.05 * media_val),
      labels = paste0("Mean = ", round(media_val, 2), " $"),
-     pos = 3,         
+     pos = 3,     
      cex = 0.8,
      col = "black")
 
@@ -393,13 +409,13 @@ summary(dados_inconclusivos$Billing.Amount)
 sd(dados_inconclusivos$Billing.Amount) 
 ```
 
-A distribuição do valor faturado (Billing.Amount) para os pacientes com resultado inconclusivo apresenta uma elevada dispersão, com valores a variarem aproximadamente entre 1 000 e 50 000 unidades monetárias. A média situa-se em torno de 26 114, sendo próxima da mediana (26 201), o que sugere uma distribuição relativamente equilibrada em termos de tendência central.
+A distribuição do valor faturado (Billing.Amount) para os pacientes com resultado inconclusivo apresenta uma elevada dispersão, com valores a variarem aproximadamente entre 1 000 e 50 000 unidades monetárias. A média situa-se em torno de 26 114,(representada no boxplot pela linha tracejada a vermelho) sendo próxima da mediana (26 201), o que sugere uma distribuição relativamente equilibrada em termos de tendência central.
 
 Para caracterizar a distribuição do valor faturado (Billing.Amount) nos pacientes com resultados inconclusivos, recorreu-se a um boxplot, uma vez que esta representação é adequada para variáveis contínuas com elevada amplitude.
 Observa-se uma elevada dispersão dos valores faturados, com um intervalo interquartil amplo e valores mínimos e máximos bastante afastados. A proximidade entre a média e a mediana sugere ausência de assimetria acentuada, não se identificando um patamar de custo dominante associado a episódios com resultados inconclusivos.
 
 
-# Pergunta 7. Considere os pacientes do sexo masculino e que tomam aspirina ou ibuprofeno e obtenha uma estimativa pontual e intervalar a 98% da média do número de dias internado (variável obtida em 3). 
+# Pergunta 7 - Considere os pacientes do sexo masculino e que tomam aspirina ou ibuprofeno e obtenha uma estimativa pontual e intervalar a 98% da média do número de dias internado (variável obtida em 3). 
 
 ```{r echo=FALSE}
 # 1. Filtragem 
@@ -429,7 +445,7 @@ Para os pacientes do sexo masculino que tomam aspirina ou ibuprofeno, procedeu-s
 
 Assumindo a independência das observações e recorrendo ao Teorema do Limite Central, foi construído um intervalo de confiança a 98% para a média populacional do número de dias de internamento. O intervalo obtido foi [14.96 ; 16.18] dias, indicando que, com um nível de confiança de 98%, a média populacional se encontra compreendida neste intervalo.
 
-# Pergunta 8. O valor médio do valor faturado para os pacientes do sexo feminino e que tomaram Lipitor é significativamente diferente de 30.000$?
+# Pergunta 8 - Assumindo a independência das observações e recorrendo ao Teorema do Limite Central, foi construído um intervalo de confiança a 98% para a média populacional do número de dias de internamento. O intervalo obtido foi [14.96 ; 16.18] dias, indicando que, com um nível de confiança de 98%, a média populacional se encontra compreendida neste intervalo.
 
 ```{r echo=FALSE}
 # 1. Filtragem 
@@ -461,7 +477,7 @@ Para as pacientes do sexo feminino medicadas com Lipitor (n = 521), procedeu-se 
 
 A média amostral observada foi de 26 377.31 €. O teste revelou uma diferença estatisticamente significativa relativamente ao valor de referência (t = −5.75, p < .001), indicando que o valor médio faturado neste subgrupo é significativamente diferente de 30 000 €, sendo inferior ao valor considerado.
 
-# Pergunta 9. Verifique se existe alguma associação entre o tipo de sangue e o tipo de admissão.
+# Pergunta 9 - Verifique se existe alguma associação entre o tipo de sangue e o tipo de admissão.
 
 Para avaliar a existência de uma associação entre o tipo de sangue e o tipo de admissão, recorreu-se a uma tabela de contingência e ao teste do Qui-Quadrado de independência de Pearson.
 
@@ -488,7 +504,9 @@ cat("p-value:", if(teste_qui2$p.value < 0.001) "p < .001" else round(teste_qui2$
 
 O teste não revelou evidência estatisticamente significativa de associação entre as variáveis (χ² = 14.03, n = 5431, p = .447). Estes resultados indicam que a distribuição do tipo de admissão é semelhante entre os diferentes grupos sanguíneos.
 
-# Pergunta 10. Considerando apenas os pacientes que tiveram os resultados dos exames na admissão normal ou anormal, verifique se existe alguma associação entre o sexo e o resultado do teste. 
+\newpage
+
+# Pergunta 10 - Considerando apenas os pacientes que tiveram os resultados dos exames na admissão normal ou anormal, verifique se existe alguma associação entre o sexo e o resultado do teste. 
 
 Considerando apenas os pacientes com resultados válidos dos exames na admissão (Normal ou Anormal), a análise foi realizada sobre uma amostra de 3682 indivíduos.
 
@@ -498,14 +516,16 @@ dados_10 <- subset(amostra, Test.Results != "Inconclusive")
 dados_10$Test.Results <- droplevels(dados_10$Test.Results)
 
 # 2. Realização do teste
-teste_10 <- chisq.test(table(dados_10$Gender, dados_10$Test.Results))
+teste_10 <- chisq.test(table(dados_10$Gender, dados_10$Test.Results),correct=FALSE)
 
-# 3. Output para analise
-cat("Dimensão da Amostra (n) =", nrow(dados_10), "\n")
+# 3. Output "Bonito" com o n no topo
+
+cat("       TESTE DE ASSOCIAÇÃO: ITEM 10               \n")
+cat("       Dimensão da Amostra (n) =", nrow(dados_10), "\n")
 print(teste_10)
 
 # 4. Tabela de Percentagens (Regra 2) para complementar
-cat("Distribuição Percentual por Género")
+cat("\n--- Distribuição Percentual por Género ---\n")
 tabela_percent <- round(prop.table(teste_10$observed, margin = 1) * 100, 2)
 print(tabela_percent)
 
@@ -513,15 +533,21 @@ print(tabela_percent)
 
 O teste do Qui-Quadrado de independência de Pearson, com correção de continuidade de Yates, não evidenciou uma associação estatisticamente significativa entre o sexo e o resultado do teste (χ² = 3.31, df = 1, p = .069). As frequências relativas indicam proporções semelhantes de resultados anormais entre homens e mulheres.
 
-# Pergunta 11. Verifique se existe alguma correlação entre a idade e o número de dias internado. Construa o diagrama de dispersão e use cores diferentes para identificar o sexo masculino e feminino.
+\newpage
+
+# Pergunta 11 - Verifique se existe alguma correlação entre a idade e o número de dias internado. Construa o diagrama de dispersão e use cores diferentes para identificar o sexo masculino e feminino.
 
 A relação entre a idade (Age) e o número de dias de internamento (Days_Stay) foi avaliada através do coeficiente de correlação de Pearson, com base numa amostra de 5431 pacientes.
 ```{r item11, echo=FALSE}
 # 1. Realização do Teste de Correlação
 # Usamos as variáveis Age e Days_Stay (já criada anteriormente)
 teste_cor_11 <- cor.test(amostra$Age, amostra$Days_Stay)
-# 2. Output para Analise
-cat(" Dimensão da Amostra (n) =", nrow(amostra), "\n")
+
+# 2. Output Personalizado com n no topo
+cat("==================================================\n")
+cat("       ANÁLISE DE CORRELAÇÃO: ITEM 11             \n")
+cat("       Dimensão da Amostra (n) =", nrow(amostra), "\n")
+cat("==================================================\n")
 print(teste_cor_11)
 
 # 3. Construção do Gráfico (Diagrama de Dispersão)
@@ -538,14 +564,15 @@ ggplot(amostra, aes(x = Age, y = Days_Stay, color = Gender)) +
        x = "Idade (Anos)",
        y = "Dias de Internamento",
        color = "Sexo",
-       caption = bquote(bold("Gráfico 9") ~ "- Relação entre Idade e Dias de Internamento")
-       ) +
+       caption = bquote(bold("Gráfico 9") ~ "- Relação entre Idade e Dias de Internamento")) +
   theme_minimal()
 ```
 
 O coeficiente de correlação obtido foi r = −0.009, não sendo estatisticamente significativo (p = .499). O diagrama de dispersão, com diferenciação por sexo, não evidencia padrões distintos entre homens e mulheres nem uma tendência linear clara. Assim, não se encontrou evidência estatística de correlação entre a idade e a duração do internamento.
 
-# Pergunta 12. Simule uma variável que represente a Idade para 150 pacientes, com base nas características da Idade desta BD. Compare os resultados obtidos representando no mesmo gráfico as duas distribuições. 
+\newpage
+
+# Pergunta 12 - Simule uma variável que represente a Idade para 150 pacientes, com base nas características da Idade desta BD. Compare os resultados obtidos representando no mesmo gráfico as duas distribuições. 
 
 Com base nas características empíricas da variável Age observadas na base de dados original, foi simulada uma amostra de 150 pacientes, assumindo uma distribuição normal parametrizada pela média e pelo desvio-padrão observados.
 
@@ -572,24 +599,22 @@ ggplot(df_total, aes(x = Idade, fill = Tipo)) +
        x = "Idade",
        y = "Densidade",
        fill = "Distribuição",
-       caption = bquote(bold("Gráfico 10") ~ "- Comparação de Distribuições: Idade Real vs. Simulada")
-       ) +
+       caption = bquote(bold("Gráfico 10") ~ "- Comparação de Distribuições: Idade Real vs. Simulada")) +
   theme_minimal()
 
 ```
 A comparação entre a distribuição real (n = 5431) e a distribuição simulada (n = 150), através da representação conjunta das curvas de densidade, indica que a amostra simulada reproduz adequadamente a forma geral, a posição central e a dispersão da distribuição original. Estes resultados sugerem que os parâmetros estimados descrevem de forma consistente a variável idade, permitindo a geração de dados sintéticos representativos.
 
+\newpage
 
 
 # Pergunta 13 - Utilizando a base de dados de que dispõe e proceda a uma análise estatística suplementar elaborando 2 questões e tire as respetivas conclusões.
 
-*13.1 - O tipo de internamento (Admission.Type) influencia o valor faturado (Billing.Amount)?*
+# *13.1 - O tipo de internamento (Admission.Type) influencia o valor faturado (Billing.Amount)?*
 
 Para avaliar se o tipo de admissão influencia o valor faturado, foram agrupados os doentes segundo a categoria de admissão existente na base de dados. Para cada grupo foi calculado o valor faturado médio, bem como o desvio-padrão, de forma a caracterizar a centralidade e a variabilidade dos custos. Posteriormente, foi elaborado um boxplot comparativo entre os diferentes tipos de admissão, incluindo a indicação da proporção que cada categoria representa na amostra e o respetivo número de casos. Este procedimento permite comparar visualmente a distribuição dos valores faturados entre categorias e identificar diferenças ou semelhanças relevantes entre grupos.
 
-#Atenção deixei aqui alterações acrescentei esta tabela bonita!! 
-
-```{r}
+```{r echo=FALSE}
 # Médias por tipo de admissão
 media_adm <- tapply(
   amostra$Billing.Amount,
@@ -615,59 +640,22 @@ tabela_13 <- data.frame(
   knitr::kable(
   tabela_13,
   col.names = c("Tipo de Admissão", "Média (€)", "Desvio-Padrão (€)"),
-  caption = "**Tabela 13** – Média e desvio-padrão do valor faturado por tipo de admissão",
+  caption = "Média e desvio-padrão do valor faturado por tipo de admissão",
   align = "c"
 )
 ```
 
-
-```{r echo=FALSE}
-#1. Obter os valores necessários
-#média
-tapply(amostra$Billing.Amount,
-       amostra$Admission.Type,
-       mean)
-#Desvio Padrão
-tapply(amostra$Billing.Amount,
-       amostra$Admission.Type,
-       sd)
-
-#2. Obter o gráfico
-
-# aumentar  a margem inferior
-par(mar = c(6, 4, 2, 1))  
-
-bp <- boxplot(Billing.Amount ~ Admission.Type,
-              data = amostra,
-              col = c("lightblue", "lightgreen", "orange"),
-              main = "",
-              xlab = "Tipo de Admissão",
-              ylab = "Valor Faturado ($)")
-
-perc <- prop.table(table(amostra$Admission.Type))[bp$names] * 100
-n <- table(amostra$Admission.Type)[bp$names]
-y_pos <- bp$stats[4, ] 
-
-text(seq_along(bp$names), y_pos,
-     labels = paste0(round(perc,1), "% (n=", n, ")"),
-     pos = 3, cex = 0.8)
-
-mtext(expression(bold("Gráfico 11 — ") * "Custo do internamento por tipo de admissão"),
-      side = 1, line = 4, cex = 0.9, adj = 0.5)
-
-```
-
-Os resultados evidenciam que os tipos de admissão apresentam valores médios faturados muito semelhantes, mas não totalmente idênticos: aproximadamente 31,7% na admissão eletiva, 34,3% na admissão de emergência e 34% na admissão urgente. Embora a diferença entre categorias seja relativamente pequena, observa-se que a admissão eletiva apresenta um valor médio ligeiramente inferior face às restantes.
-
-*A análise descritiva revela que as médias do valor faturado são relativamente semelhantes entre os diferentes tipos de internamento, situando-se aproximadamente entre 24 600€ e 26 600€. Em todos os grupos observa-se um desvio-padrão elevado, evidenciando uma considerável variabilidade dos custos dentro de cada categoria de admissão.
+A análise descritiva revela que as médias do valor faturado são relativamente semelhantes entre os diferentes tipos de internamento, situando-se aproximadamente entre 24 600€ e 26 600€. Em todos os grupos observa-se um desvio-padrão elevado, evidenciando uma considerável variabilidade dos custos dentro de cada categoria de admissão.
 
 A observação do boxplot confirma esta elevada dispersão e mostra uma forte sobreposição das distribuições entre os três tipos de internamento. As medianas encontram-se próximas e não se identificam diferenças visuais marcadas ou padrões distintos de faturação associados a um tipo específico de admissão.
-Com base na análise descritiva e na comparação gráfica das distribuições, não se observa evidência clara de que o tipo de internamento influencie de forma relevante o valor faturado dos pacientes.*
+Com base na análise descritiva e na comparação gráfica das distribuições, não se observa evidência clara de que o tipo de internamento influencie de forma relevante o valor faturado dos pacientes.
 
-*13.2 - Qual é a representação das diferentes condições médicas (Medical.Condition) dentro do género Masculino (Male).*
+\newpage
 
-Para responder a esta questão procedeu-se primeiro à filtragem da amostra por género, isolando apenas os indivíduos do sexo masculino. De seguida, foram contabilizadas a frequência absoluta e a frequência relativa de cada condição médica presente nesse subconjunto. Com base nesses valores, construiu-se um gráfico de barras horizontais que apresenta, para cada condição, o número de casos e a respetiva percentagem dentro do grupo masculino, permitindo uma comparação visual da predominância relativa das diferentes patologias nesta amostra.
-*Para responder a esta questão, procedeu-se à filtragem da amostra por género, considerando apenas os indivíduos do sexo masculino. De seguida, foram calculadas as frequências absolutas e relativas de cada condição médica neste subgrupo. Com base nestes valores, construiu-se um gráfico de barras horizontal, que apresenta, para cada condição, o número de casos e a respetiva percentagem dentro da população masculina, permitindo uma comparação visual da prevalência relativa das diferentes patologias.*
+# *13.2 - Qual é a representação das diferentes condições médicas (Medical.Condition) dentro do género Masculino (Male).*
+
+
+Para responder a esta questão, procedeu-se à filtragem da amostra por género, considerando apenas os indivíduos do sexo masculino. De seguida, foram calculadas as frequências absolutas e relativas de cada condição médica neste subgrupo. Com base nestes valores, construiu-se um gráfico de barras horizontal, que apresenta, para cada condição, o número de casos e a respetiva percentagem dentro da população masculina, permitindo uma comparação visual da prevalência relativa das diferentes patologias.
 
 ```{r echo=FALSE}
 # Calcular os valores necessários
@@ -723,10 +711,8 @@ mtext("n", side = 1, line = 3.4, cex = 1)
 
 
 ```
-A análise gráfica das condições médicas na amostra de pacientes do sexo masculino evidencia que a hipertensão e a artrite são as condições mais frequentes, representando 17,3% e 17,4% da amostra, respetivamente. Em contraste, a obesidade surge como a condição médica menos frequente, correspondendo a 15,2% dos casos observados. Estes resultados indicam uma distribuição relativamente equilibrada das condições médicas na amostra masculina, embora se verifique uma ligeira predominância da artrite e da hipertensão face às restantes patologias.
+A análise gráfica evidencia que as condições médicas mais frequentes entre os pacientes do sexo masculino são Arthritis (17,4%) e Hypertension (17,3%), apresentando proporções muito semelhantes. Seguem-se Asthma (16,8%), Diabetes (16,7%) e Cancer (16,6%), com valores igualmente próximos entre si. A condição menos frequente é Obesity, representando 15,2% dos casos observados neste subgrupo. A distribuição das condições médicas na amostra masculina revela um padrão relativamente equilibrado, sem predominância marcada de uma patologia específica. As diferenças observadas entre as categorias são pequenas, indicando que, dentro do género masculino, as diversas condições médicas apresentam prevalências semelhantes, ainda que com uma ligeira predominância de artrite e hipertensão. Na população masculina analisada, as diferentes condições médicas apresentam uma distribuição globalmente equilibrada, destacando-se marginalmente a artrite e a hipertensão como as patologias mais frequentes, e a obesidade como a menos representada.
 
-
-*A análise gráfica evidencia que as condições médicas mais frequentes entre os pacientes do sexo masculino são Arthritis (17,4%) e Hypertension (17,3%), apresentando proporções muito semelhantes. Seguem-se Asthma (16,8%), Diabetes (16,7%) e Cancer (16,6%), com valores igualmente próximos entre si. A condição menos frequente é Obesity, representando 15,2% dos casos observados neste subgrupo. A distribuição das condições médicas na amostra masculina revela um padrão relativamente equilibrado, sem predominância marcada de uma patologia específica. As diferenças observadas entre as categorias são pequenas, indicando que, dentro do género masculino, as diversas condições médicas apresentam prevalências semelhantes, ainda que com uma ligeira predominância de artrite e hipertensão. Na população masculina analisada, as diferentes condições médicas apresentam uma distribuição globalmente equilibrada, destacando-se marginalmente a artrite e a hipertensão como as patologias mais frequentes, e a obesidade como a menos representada.*
 
 
 
